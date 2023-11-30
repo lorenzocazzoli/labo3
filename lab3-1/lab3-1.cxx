@@ -34,6 +34,7 @@ void calibrazione() {
     // devono essere mV e mV, perché se no si hanno un po di problemini
     TCanvas * ccalibrazione = new TCanvas();
     voltaggioVoltaggio->Draw();
+    ccalibrazione->Print("calibrazioneVV.pdf");
 }
 
 // ! Gli errori sono sbagliati, vanno controllate le formule per ottenere gli errori
@@ -63,6 +64,7 @@ void silicio() {
     // devono essere mV e mA
     TCanvas * cSilicio = new TCanvas(); 
     silicioIV->Draw();
+    cSilicio->Print("silicioIV.pdf");
 }
 
 // ! Gli errori sono sbagliati, vanno controllate le formule per ottenere gli errori
@@ -94,6 +96,7 @@ void germanio() {
     // devono essere mV e mA
     TCanvas * cGermanio = new TCanvas(); 
     germanioIV->Draw();
+    cGermanio->Print("germanioIV.pdf");
 }
 
 void analisi() {
