@@ -39,12 +39,6 @@ void calibrazione() {
 void silicio() {
     // array di valori I
     Double_t correnteMultiS[17] {0.01, 0.02, 0.05, 0.07, 0.11, 0.14, 0.16, 0.25, 0.36, 0.53, 0.76, 0.89, 1.11, 1.65, 1.92, 3.97, 7.99};
-    // array di logI          
-    //Double_t correnteMultiLogS[17];            
-    // riempimento array di valori logI
-    //for(int i=0; i<17; i++) {
-    //    correnteMultiLogS[i] = log(correnteMultiS[i]);
-    //}
     Double_t erroreCorrenteMultiS[17] {0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01};
     Double_t voltaggioOscilloS[17] {400.0, 450.0, 500.0, 520.0, 540.0, 550.0, 560.0, 580.0, 600.0, 620.0, 640.0, 650.0, 660.0, 680.0, 700.0, 750.0, 800.0};
     Double_t erroreVoltaggioOscilloS[17] {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20, 20, 20};
