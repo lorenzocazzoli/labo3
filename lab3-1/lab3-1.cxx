@@ -30,8 +30,6 @@ void calibrazione() {
     TF1 * correlazione = new TF1("correlazione", "[0]+[1]*x", 98, 800);
     correlazione->SetParameters(0,1);
     voltaggioVoltaggio->Fit("correlazione", "R"); // R option limits the fit in the range of the function
-    // ricordarsi di cambiare i nomi degli assi inserendo le appropriate unità di misura
-    // devono essere mV e mV, perché se no si hanno un po di problemini
     TCanvas * ccalibrazione = new TCanvas();
     voltaggioVoltaggio->Draw();
     ccalibrazione->Print("calibrazioneVV.pdf");
@@ -42,61 +40,51 @@ void silicio() {
     // array di valori I
     Double_t correnteMultiS[17] {0.01, 0.02, 0.05, 0.07, 0.11, 0.14, 0.16, 0.25, 0.36, 0.53, 0.76, 0.89, 1.11, 1.65, 1.92, 3.97, 7.99};
     // array di logI          
-    Double_t correnteMultiLogS[17];            
+    //Double_t correnteMultiLogS[17];            
     // riempimento array di valori logI
-    for(int i=0; i<17; i++) {
-        correnteMultiLogS[i] = log(correnteMultiS[i]);
-    }
+    //for(int i=0; i<17; i++) {
+    //    correnteMultiLogS[i] = log(correnteMultiS[i]);
+    //}
     Double_t erroreCorrenteMultiS[17] {0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01};
     Double_t voltaggioOscilloS[17] {400.0, 450.0, 500.0, 520.0, 540.0, 550.0, 560.0, 580.0, 600.0, 620.0, 640.0, 650.0, 660.0, 680.0, 700.0, 750.0, 800.0};
     Double_t erroreVoltaggioOscilloS[17] {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20, 20, 20};
     TGraphErrors * silicioIV = new TGraphErrors(17);
     for(int i=0; i<17; i++) {
-        silicioIV->SetPoint(i, voltaggioOscilloS[i], correnteMultiLogS[i]);
+        silicioIV->SetPoint(i, voltaggioOscilloS[i], correnteMultiS[i]);
         silicioIV->SetPointError(i, erroreVoltaggioOscilloS[i], erroreCorrenteMultiS[i]);
     }
     silicioIV->SetTitle("Voltaggio-Corrente diodo Silicio; Voltaggio Oscilloscopio (mV); Log Corrente Multimetro (mA)");
-    TF1 * silicioFunction = new TF1("silicioFunction", "[0]+[1]*x");
-    // ! la funzione non fitta se in range minimo è impostato vicino ai 500 mV, -3 log(mA)
-    // TODO controllare come far tornare il fit lineare in una zona più appropriata 
-    silicioFunction->SetRange(400.0, -4.5, 650.0, 0.5);
-    silicioFunction->SetParameters(0, 0.5);
+    TF1 * silicioFunction = new TF1("silicioFunction", "[0]+([1]*exp(x*[2]))");
+    silicioFunction->SetRange(400.0, 0.1, 650.0, 1.0);
+    // TODO inserire i parametri attesi per fare il fit senza che root dia problemi
+    //silicioFunction->SetParameters(0, 0.5);
     silicioIV->Fit("silicioFunction", "R"); // R option limits the fit in the range of the function
-    // ricordarsi di cambiare i nomi degli assi inserendo le appropriate unità di misura
-    // devono essere mV e mA
     TCanvas * cSilicio = new TCanvas(); 
+    gPad->SetLogy();
     silicioIV->Draw();
     cSilicio->Print("silicioIV.pdf");
 }
 
 // ! Gli errori sono sbagliati, vanno controllate le formule per ottenere gli errori
-// ! Per qualche motivo il range degli assi è completamente sballato e va a centinaia anche sulle y
 void germanio() {
     // array di valori I
     Double_t correnteMultiG[16] {0.01, 0.02, 0.03, 0.04, 0.07, 0.11, 0.18, 0.26, 0.40, 0.58, 0.84, 1.21, 1.70, 2.34, 3.08, 5.17};
-    // array di logI          
-    Double_t correnteMultiLogG[16];            
-    // riempimento array di valori logI
-    for(int i=0; i<16; i++) {
-        correnteMultiLogG[i] = log(correnteMultiG[i]);
-    }
-    // TODO controllare il range dell'asse Y!
     Double_t erroreCorrenteMultiG[16] {0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01};
     Double_t voltaggioOscilloG[16] {70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 400};
-    Double_t erroreVoltaggioOscilloG[16] {5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
-    TGraphErrors * germanioIV = new TGraphErrors(17);
-    for(int i=0; i<17; i++) {
-        germanioIV->SetPoint(i, voltaggioOscilloG[i], correnteMultiLogG[i]);
+    Double_t erroreVoltaggioOscilloG[16] {5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+    TGraphErrors * germanioIV = new TGraphErrors(16);
+    for(int i=0; i<16; i++) {
+        germanioIV->SetPoint(i, voltaggioOscilloG[i], correnteMultiG[i]);
         germanioIV->SetPointError(i, erroreVoltaggioOscilloG[i], erroreCorrenteMultiG[i]);
     }
     germanioIV->SetTitle("Voltaggio-Corrente diodio Germanio; Voltaggio Oscilliscopio (mV); Log Corrente Multimetro (mA)");
-    TF1 * germanioFunction = new TF1("germanioFunction", "[0]+[1]*x");
-    germanioFunction->SetRange(100.0, -1.0, 300.0, 0.0);
-    germanioFunction->SetParameters(0, 0.5);
+    TF1 * germanioFunction = new TF1("germanioFunction", "[0]+([1]*exp(x*[2]))");
+    germanioFunction->SetRange(100.0, 0.01, 300.0, 1.75);
+    // TODO inserire i parametri attesi per fare il fit senza che root dia problemi
+    //germanioFunction->SetParameters(0, 0.5);
     germanioIV->Fit("germanioFunction", "R"); // R option limits the fit in the range of the function
-    // ricordarsi di cambiare i nomi degli assi inserendo le appropriate unità di misura
-    // devono essere mV e mA
     TCanvas * cGermanio = new TCanvas(); 
+    gPad->SetLogy();
     germanioIV->Draw();
     cGermanio->Print("germanioIV.pdf");
 }
