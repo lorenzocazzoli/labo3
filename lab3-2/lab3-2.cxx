@@ -80,17 +80,15 @@ void correnteTransistor() {
     //    Grafica   //
     // ------------ //
 
-    TCanvas * canvas = new TCanvas(); // costruttore di base perché chi se ne frega
-    // TODO distinguere i due grafici in maniera visuale, con colori diversi del fit magari
-    // impostazione grafica per distinguere i due TGraph e rispettivi fit
-    //studio200->;
-    //studio100->;
+    TCanvas * canvas200 = new TCanvas(); // costruttore di base perché chi se ne frega
     studio200->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (mA)");
-    // disegno dei grafici
     studio200->Draw("APE");
-    studio100->Draw("PE");
-    // stampa canvas in formato pdf
-    canvas->Print("correnticaratteristiche.pdf");
+    canvas200->Print("bjt200.pdf");
+
+    TCanvas * canvas100 = new TCanvas(); // costruttore di base perché chi se ne frega
+    studio200->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (mA)");
+    studio100->Draw("APE");
+    canvas100->Print("bjt100.pdf");
 }
 
 void analisi() {
