@@ -47,6 +47,8 @@ void correnteTransistor() {
     funzione200->SetRange(1, 4.0);
     // imboccare root che se no fa i capricci
     funzione200->SetParameters(25, 0.05);
+    // cambio nomi dei parametri
+    funzione200->SetParNames("A","B");
     // fit della funzione con limite uguale al range della funzione
     studio200->Fit("funzione200", "R");
     
@@ -79,6 +81,8 @@ void correnteTransistor() {
     funzione100->SetRange(1, 4.0);
     // imboccare root che se no fa i capricci
     funzione100->SetParameters(15, 0.05);
+     // cambio nomi dei parametri
+    funzione100->SetParNames("A","B");
     // fit della funzione con limite uguale al range della funzione
     studio100->Fit("funzione100", "R");
 
@@ -87,14 +91,27 @@ void correnteTransistor() {
     // ------------ //
 
     TCanvas * canvas200 = new TCanvas(); // costruttore di base perché chi se ne frega
-    studio200->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (mA)");
+    studio200->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (μA)");
     studio200->Draw("APE");
     canvas200->Print("bjt200.pdf");
+    std::cout << "Ib = 200 μA - RISULTATI" << "\n";
+    std::cout << "Valore Bf: " << funzione200->GetParameter("A")/200.0 << "\n";
+    std::cout << "Valore Va: " << funzione200->GetParameter("A")/funzione200->GetParameter("B") << "\n";
+    std::cout << "Valore R: " << 1.0/funzione200->GetParameter("B") << "\n";
+    std::cout << "Valore g: " << funzione200->GetParameter("B") << "\n";
+    std::cout << "----------------------------------------------------" << "\n";
+    
 
     TCanvas * canvas100 = new TCanvas(); // costruttore di base perché chi se ne frega
-    studio200->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (mA)");
+    studio200->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (μA)");
     studio100->Draw("APE");
     canvas100->Print("bjt100.pdf");
+    std::cout << "Ib = 100 μA - RISULTATI" << "\n";
+    std::cout << "Valore Bf: " << funzione100->GetParameter("A")/200.0 << "\n";
+    std::cout << "Valore Va: " << funzione100->GetParameter("A")/funzione100->GetParameter("B") << "\n";
+    std::cout << "Valore R: " << 1.0/funzione100->GetParameter("B") << "\n";
+    std::cout << "Valore g: " << funzione100->GetParameter("B") << "\n";
+    std::cout << "----------------------------------------------------" << "\n";
 }
 
 void analisi() {
