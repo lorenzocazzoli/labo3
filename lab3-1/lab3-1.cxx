@@ -70,14 +70,22 @@ void calibrazione() {
 
 void silicio() {
     // array di valori I
-    Double_t correnteMultiS[17] {0.01, 0.02, 0.05, 0.07, 0.11, 0.14, 0.16, 0.25, 0.36, 0.53, 0.76, 0.89, 1.11, 1.65, 1.92, 3.97, 7.99};
-    Double_t erroreCorrenteMultiS[17] {0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01};
-    Double_t voltaggioOscilloS[17] {400.0, 450.0, 500.0, 520.0, 540.0, 550.0, 560.0, 580.0, 600.0, 620.0, 640.0, 650.0, 660.0, 680.0, 700.0, 750.0, 800.0};
-    Double_t scalaVoltaggioOscilloS[17] {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20, 20, 20};
+    Double_t correnteMultiS[14] {0.01, 0.02, 0.05, 0.07, 0.11, 0.14, 0.16, 0.25, 0.36, 0.53, 0.76, 0.89, 1.11, 1.65, 1.92, 3.97, 7.99};
+    // Double_t scalaCorrenteMultiS[14] {0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01};
+    Double_t voltaggioOscilloS[14] {400.0, 450.0, 500.0, 520.0, 540.0, 560.0, 580.0, 600.0, 620.0, 640.0, 660.0, 680.0, 700.0, 750.0};
+    Double_t scalaVoltaggioOscilloS[14] {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 200, 200};
     // calcolo errore oscilloscopio
     Double_t erroreVoltaggioOscilloS[17];
-    for (int i=0; i<17; i++) {
-        erroreVoltaggioOscilloS[i] = scalaVoltaggioOscilloS[i]*0.2*1;
+    // calcolo errore oscilloscopio
+    for (int i=0; i<14; i++) {
+        //                                           sigmaL                            sigmaL                             sigmaC*sigmaC
+        erroreVoltaggioOscilloS[i] = TMath::Sqrt(2*(scalaVoltaggioOscilloS[i]*0.2*1)*(scalaVoltaggioOscilloS[i]*0.2*1) + (0.03*voltaggioOscilloscopioS)*(0.03*voltaggioOscilloscopioS));
+    }
+    // calcolo errore multimetro
+    Double_t erroreCorrenteMultiS[14];
+    for (int i=0; i<14; i++){
+        // in questo caso non ci sono due casi distinti perché rimaniamo sempre nel fondoscala di 32.00 mA
+        erroreCorrenteMultiS[i] = (correnteMultiS[i]*1.5*0.01)+0.02;
     }
     // creazione grafico X-Y con errori
     TGraphErrors * silicioIV = new TGraphErrors(17);
@@ -107,13 +115,19 @@ void silicio() {
 void germanio() {
     // array di valori I
     Double_t correnteMultiG[16] {0.01, 0.02, 0.03, 0.04, 0.07, 0.11, 0.18, 0.26, 0.40, 0.58, 0.84, 1.21, 1.70, 2.34, 3.08, 5.17};
-    Double_t erroreCorrenteMultiG[16] {0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01};
+    //Double_t scalaCorrenteMultiG[16] {0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01};
     Double_t voltaggioOscilloG[16] {70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 400};
-    Double_t scalaVoltaggioOscilloG[16] {5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+    Double_t scalaVoltaggioOscilloG[16] {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
     // calcolo errore oscilloscopio
     Double_t erroreVoltaggioOscilloG[16];
     for (int i=0; i<16; i++) {
-        erroreVoltaggioOscilloG[i] = scalaVoltaggioOscilloG[i]*0.2*1;
+        erroreVoltaggioOscilloG[i] = TMath::Sqrt(2*(scalaVoltaggioOscilloG[i]*0.2*1)*(scalaVoltaggioOscilloG[i]*0.2*1) + (0.03*voltaggioOscilloG)*(0.03*voltaggioOscilloG));
+    }
+    // calcolo errore multimetro
+    Double_t erroreCorrenteMultiG[16];
+    for (int i=0; i<16; i++){
+        // in questo caso non ci sono due casi distinti perché rimaniamo sempre nel fondoscala di 32.00 mA
+        erroreCorrenteMultiG[i] = (correnteMultiG[i]*1.5*0.01)+0.02;
     }
     // creazione grafico X-Y con errori   
     TGraphErrors * germanioIV = new TGraphErrors(16);
