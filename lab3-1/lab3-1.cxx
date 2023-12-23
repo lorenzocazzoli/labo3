@@ -60,6 +60,8 @@ void calibrazione() {
     TF1 * correlazione = new TF1("correlazione", "[0]+[1]*x", 98, 800);
     // imboccare root che se no fa i capricci
     correlazione->SetParameters(0,1);
+    // cambio nome dei parametri
+    correlazione->SetParNames("A","B");
     // fit della funzione sul thgrapherror
     voltaggioVoltaggio->Fit("correlazione", "R"); // R option limits the fit in the range of the function
     // inizializzazione canvas e stampa del grafico con fit
@@ -96,12 +98,14 @@ void silicio() {
     // setup titolo e label
     silicioIV->SetTitle("Voltaggio-Corrente diodo Silicio; Voltaggio Oscilloscopio (mV); Log Corrente Multimetro (mA)");
     // inizializzazione della funzione per il fit
-    TF1 * silicioFunction = new TF1("silicioFunction", "[0]+([1]*exp(x*[2]))");
+    TF1 * silicioFunction = new TF1("silicioFunction", "[0]+(exp(x*[1]))");
     // impostazione range di validità della funzione nel range esponenziale del V-I
     silicioFunction->SetRange(400.0, 0.1, 650.0, 1.0);
     // TODO inserire i parametri attesi per fare il fit senza che root dia problemi
     // imboccare root che se no fa i capricci
-    //silicioFunction->SetParameters(0, 0.5);
+    // silicioFunction->SetParameters(0, 0.5);
+    // cambio nomi dei parametri (considerare che rimangono quelli esponenziali, fino alla logaritmizzazione nel grafico)
+    silicioFunction->SetParNames("A","B");
     // fit della funzione
     silicioIV->Fit("silicioFunction", "R"); // R option limits the fit in the range of the function
     // inizializzazione canvas
@@ -110,6 +114,11 @@ void silicio() {
     gPad->SetLogy();
     silicioIV->Draw();
     cSilicio->Print("silicioIV.pdf");
+
+    std::cout << "Risultati diodo silicio" << "\n";
+    std::cout << "Io = " << TMath::Exp(silicioFunction->GetParameter("A")) << "\n";
+    std::cout << "ηVt = " << 1/silicioFunction->GetParameter("B") << "\n";
+    std::cout "-----------------------------------------------" << "\n";
 }
 
 void germanio() {
@@ -138,12 +147,14 @@ void germanio() {
     // setup titolo e label
     germanioIV->SetTitle("Voltaggio-Corrente diodio Germanio; Voltaggio Oscilliscopio (mV); Log Corrente Multimetro (mA)");
     // inizializzazione della funzione per il fit
-    TF1 * germanioFunction = new TF1("germanioFunction", "[0]+([1]*exp(x*[2]))");
+    TF1 * germanioFunction = new TF1("germanioFunction", "[0]+(exp(x*[1]))");
     // impostazione range di validità della funzione nel range esponenziale del V-I
     germanioFunction->SetRange(100.0, 0.01, 300.0, 1.75);
     // TODO inserire i parametri attesi per fare il fit senza che root dia problemi
     // imboccare root che se no fa i capricci
     //germanioFunction->SetParameters(0, 0.5);
+    // cambio nomi dei parametri (considerare che rimangono quelli esponenziali, fino alla logaritmizzazione nel grafico)
+    germanioFunction->SetParNames("A","B");
     // fit della funzione
     germanioIV->Fit("germanioFunction", "R"); // R option limits the fit in the range of the function
     // inizializzazione canvas
@@ -152,6 +163,11 @@ void germanio() {
     gPad->SetLogy();
     germanioIV->Draw();
     cGermanio->Print("germanioIV.pdf");
+
+    std::cout << "Risultati diodo germanio" << "\n";
+    std::cout << "Io = " << TMath::Exp(germanioFunction->GetParameter("A")) << "\n";
+    std::cout << "ηVt = " << 1/germanioFunction->GetParameter("B") << "\n";
+    std::cout "-----------------------------------------------" << "\n";
 }
 
 void analisi() {
