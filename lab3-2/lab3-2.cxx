@@ -17,8 +17,6 @@ void setstyle() {
 // * Ricordarsi che tutti i valori di voltaggio e corrente sono negativi, ma scritti qui in valore assoluto
 // TODO Segnare negli assi che i valori sono in -V e -mA
 void correnteTransistor() {
-    // essendo la corrente misurata col multimetro il valore non cambia
-    Double_t erroreCorrente = 0.01;
 
     // ------------ //
     //     200mA    //
@@ -32,7 +30,11 @@ void correnteTransistor() {
     Double_t corrente200[18] {36.9, 36.12, 35.16, 34.20, 33.20, 31.45, 30.91, 30.18, 29.20, 27.85, 26.64, 23.51, 20.37, 19.44, 19.40, 9.90, 4.38, 0.67};
     Double_t erroreVoltaggio200[18] {}; 
     for(int i=0; i<18; i++){
-        erroreVoltaggio200[i] = scalaVoltaggio200[i]/5;
+        erroreVoltaggio200[i] = TMath::Sqrt(2*(scalaVoltaggio200[i]*0.2*1)*(scalaVoltaggio200[i]*0.2*1)+(0.03*voltaggio200[i])*(0.03*voltaggio200[i]));
+    }
+    Double_t erroreCorrente200[18] {};
+    for(int i=0; i<18; i++){
+        erroreCorrente200[i] = corrente200[i]*1.5*0.01 + 0.02;
     }
     // inserimento dei valori per corrente in B = 200 nel TGraphErrors
     TGraphErrors * studio200 = new TGraphErrors(18);
@@ -56,11 +58,15 @@ void correnteTransistor() {
     // Voltaggio letto tra Collettore ed Emettitore in configurazione ad emettitore comune
     Double_t voltaggio100[18] {4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.8, 0.6, 0.5, 0.4, 0.3, 0.275, 0.25, 0.2, 0.15, 0.1, 0.05};
     // la scala del voltaggio letto sull'oscilloscopio è indicata in Volt e rappresenta la corrispondenza in Volt di un quadretto sull'Oscilloscopio
-    Double_t scalaVoltaggio100[18] {1.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.05, 0.05, 0.05, 0.05, 0.02, 0.02};
+    Double_t scalaVoltaggio100[18] {1.0, 1.0, 0.5, 0.5, 0.5, 0.5, 0.2, 0.2, 0.1, 0.1, 0.1, 0.5, 0.05, 0.05, 0.05, 0.05, 0.02, 0.02};
     Double_t corrente100[18] {18.18, 18.06, 17.83, 17.48, 17.05, 16.57, 16.06, 15.80, 15.48, 15.16, 14.68, 13.41, 12.67, 11.86, 9.28, 5.63, 2.05, 0.27};
     Double_t erroreVoltaggio100[18] {};
     for(int i=0; i<18; i++){
-        erroreVoltaggio100[i] = scalaVoltaggio100[i]/5;
+        erroreVoltaggio100[i] = TMath::Sqrt(2*(scalaVoltaggio100[i]/5)*(scalaVoltaggio100[i]/5)+ (0.03*voltaggio100[i])*(0.03*voltaggio100[i]));
+    }
+    Double_t erroreCorrente100[18] {};
+    for(int i=0; i<18; i++){
+        erroreCorrente100[i] = corrente100[i]*1.5*0.01 + 0.02;
     }
     // inserimento dei valori per corrente in B = 100 nel TGraphErrors
     TGraphErrors * studio100 = new TGraphErrors(18);
