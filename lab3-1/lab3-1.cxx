@@ -25,15 +25,28 @@ void setstyle() {
 
 void calibrazione() {
     Double_t calibroMultiV[8] {98.0 , 196.0 , 295.0 , 396.0 , 497.0 , 595.0 , 683.0, 784.0};
-    // l'errore sul multimetro è trascurabile rispetto a quello sull'oscilloscopio
-    Double_t erroreCalibroMultiV[8] {0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01};
+    // creazione vettore degli errori sui voltaggi presi col multimetro
+    Double_t erroreCalibroMultiV[8];
+    // calcolo errore multimetro
+    for(int i=0;  i<8; i++){
+        if(i<=2){
+            // fondo scala 320.0 mV
+            erroreCalibroMultiV[i] = (calibroMultiV[i]*0.3*0.01)+0.01;
+        } else {
+            // fondo scala 3200 mV
+            erroreCalibroMultiV[i] = (calibroMultiV[i]*0.3*0.01)+3;
+        }
+    }
+    // dati raccolti con l'oscilloscopio
     Double_t calibroOscilloV[8] {100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0};
     // l'errore effettivo sull'oscilloscopio segue una formula che non ricordo
-    Double_t scalaCalibroOscilloV[8] {2, 5, 5, 10, 10, 10, 20, 20};
+    Double_t scalaCalibroOscilloV[8] {20, 50, 50, 100, 100, 100, 200, 200};
     // calcolo errore oscilloscopio
     Double_t erroreCalibroOscilloV[8];
     for (int i=0; i<8; i++) {
-        erroreCalibroOscilloV[i] = scalaCalibroOscilloV[i]*0.2*1;
+        // sigmaL=sigmaZ-->2sigmaL^2=sigmaL^2+sigmaZ^2
+        //                                       sigmaL                          sigmaL                            sigmaC                 sigmaC
+        erroreCalibroOscilloV[i] = TMath::Sqrt(2*(scalaCalibroOscilloV[i]*0.2*1)*(scalaCalibroOscilloV[i]*0.2*1) + (0.03*calibroOscilloV)*(0.03*calibroOscilloV));
     }
     // creazione grafico X-Y con errori
     TGraphErrors * voltaggioVoltaggio = new TGraphErrors();
