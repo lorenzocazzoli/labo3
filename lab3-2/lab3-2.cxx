@@ -103,7 +103,7 @@ void correnteTransistor() {
     
 
     TCanvas * canvas100 = new TCanvas(); // costruttore di base perché chi se ne frega
-    studio200->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (μA)");
+    studio100->SetTitle("Curve caratteristiche Vce-Ic; -Vce (Volt); -Ic (μA)");
     studio100->Draw("APE");
     canvas100->Print("bjt100.pdf");
     std::cout << "Ib = 100 μA - RISULTATI" << "\n";
