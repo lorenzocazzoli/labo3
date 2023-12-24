@@ -67,7 +67,7 @@ void calibrazione() {
     // inizializzazione canvas e stampa del grafico con fit
     TCanvas * ccalibrazione = new TCanvas();
     voltaggioVoltaggio->Draw();
-    ccalibrazione->Print("calibrazioneVV.pdf");
+    ccalibrazione->Print("calibrazioneVV.png");
 }
 
 void silicio() {
@@ -115,7 +115,7 @@ void silicio() {
     // impostazione scala logaritmica e stampa
     gPad->SetLogy();
     silicioIV->Draw();
-    cSilicio->Print("silicioIV.pdf");
+    cSilicio->Print("silicioIV.png");
 
     std::cout << "Risultati diodo silicio" << "\n";
     std::cout << "Io = " << TMath::Exp(silicioFunction->GetParameter("A")) << "\n";
@@ -166,7 +166,7 @@ void germanio() {
     // impostazione scala logaritmica e stampa
     gPad->SetLogy();
     germanioIV->Draw();
-    cGermanio->Print("germanioIV.pdf");
+    cGermanio->Print("germanioIV.png");
 
     std::cout << "Risultati diodo germanio" << "\n";
     std::cout << "Io = " << TMath::Exp(germanioFunction->GetParameter("A")) << "\n";
