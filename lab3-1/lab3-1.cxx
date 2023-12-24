@@ -101,9 +101,11 @@ void silicio() {
     TF1 * silicioFunction = new TF1("silicioFunction", "[0]+(exp(x*[1]))");
     // impostazione range di validità della funzione nel range esponenziale del V-I
     silicioFunction->SetRange(400.0, 0.1, 650.0, 1.0);
-    // TODO inserire i parametri attesi per fare il fit senza che root dia problemi
     // imboccare root che se no fa i capricci
-    // silicioFunction->SetParameters(0, 0.5);
+    /* i valori inseriti sono indicativi e ricavati come parametri di una retta passante tra, 
+       due punti arbitrari del grafico (con corrente logaritmica), (560, -1.8325);(680, 0.5) 
+       ma dovrebbero comunque dare risultati decenti*/
+    silicioFunction->SetParameters(2.99E-6, 0.019);
     // cambio nomi dei parametri (considerare che rimangono quelli esponenziali, fino alla logaritmizzazione nel grafico)
     silicioFunction->SetParNames("A","B");
     // fit della funzione
@@ -150,9 +152,11 @@ void germanio() {
     TF1 * germanioFunction = new TF1("germanioFunction", "[0]+(exp(x*[1]))");
     // impostazione range di validità della funzione nel range esponenziale del V-I
     germanioFunction->SetRange(100.0, 0.01, 300.0, 1.75);
-    // TODO inserire i parametri attesi per fare il fit senza che root dia problemi
     // imboccare root che se no fa i capricci
-    //germanioFunction->SetParameters(0, 0.5);
+    /* i valori inseriti sono indicativi e ricavati come parametri di una retta passante tra, 
+       due punti arbitrari del grafico (con corrente logaritmica), (150, -2.66);(350, 1.125) 
+       ma dovrebbero comunque dare risultati decenti*/
+    germanioFunction->SetParameters(0.004, 0.019); 
     // cambio nomi dei parametri (considerare che rimangono quelli esponenziali, fino alla logaritmizzazione nel grafico)
     germanioFunction->SetParNames("A","B");
     // fit della funzione
